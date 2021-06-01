@@ -33,11 +33,17 @@
       withAssetGroup:(LOTAssetGroup *)assetGroup
        withFramerate:(NSNumber *)framerate {
 
-  _layerName = [jsonDictionary[@"nm"] copy];
-  _layerID = [jsonDictionary[@"ind"] copy];
-  
-  NSNumber *layerType = jsonDictionary[@"ty"];
-  _layerType = layerType.integerValue;
+    if (jsonDictionary[@"nm"]) {
+        _layerName = [jsonDictionary[@"nm"] copy];
+    }
+    if (jsonDictionary[@"ind"]) {
+        _layerID = [jsonDictionary[@"ind"] copy];
+    }
+
+    if (jsonDictionary[@"ty"]) {
+        NSNumber *layerType = jsonDictionary[@"ty"];
+        _layerType = layerType.integerValue;
+    }
   
   if (jsonDictionary[@"refId"]) {
     _referenceID = [jsonDictionary[@"refId"] copy];
