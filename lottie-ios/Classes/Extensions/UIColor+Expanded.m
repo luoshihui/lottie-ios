@@ -40,12 +40,12 @@ static NSMutableDictionary *colorNameCache = nil;
 
 @implementation UIColor (UIColor_Expanded)
 
-- (CGColorSpaceModel)colorSpaceModel {
+- (CGColorSpaceModel)LOT_colorSpaceModel {
 	return CGColorSpaceGetModel(CGColorGetColorSpace(self.CGColor));
 }
 
 - (NSString *)LOT_colorSpaceString {
-	switch (self.colorSpaceModel) {
+	switch (self.LOT_colorSpaceModel) {
 		case kCGColorSpaceModelUnknown:
 			return @"kCGColorSpaceModelUnknown";
 		case kCGColorSpaceModelMonochrome:
@@ -67,8 +67,8 @@ static NSMutableDictionary *colorNameCache = nil;
 	}
 }
 
-- (BOOL)canProvideRGBComponents {
-	switch (self.colorSpaceModel) {
+- (BOOL)LOT_canProvideRGBComponents {
+	switch (self.LOT_colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
 		case kCGColorSpaceModelMonochrome:
 			return YES;
@@ -78,7 +78,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (NSArray *)LOT_arrayFromRGBAComponents {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -LOT_arrayFromRGBAComponents");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be an RGB color to use -LOT_arrayFromRGBAComponents");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -96,7 +96,7 @@ static NSMutableDictionary *colorNameCache = nil;
   
 	CGFloat r,g,b,a;
   
-	switch (self.colorSpaceModel) {
+	switch (self.LOT_colorSpaceModel) {
 		case kCGColorSpaceModelMonochrome:
 			r = g = b = components[0];
 			a = components[1];
@@ -119,45 +119,45 @@ static NSMutableDictionary *colorNameCache = nil;
 	return YES;
 }
 
-- (CGFloat)red {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -red");
+- (CGFloat)LOT_red {
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be an RGB color to use -red");
 	const CGFloat *c = CGColorGetComponents(self.CGColor);
 	return c[0];
 }
 
-- (CGFloat)green {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -green");
+- (CGFloat)LOT_green {
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be an RGB color to use -green");
 	const CGFloat *c = CGColorGetComponents(self.CGColor);
-	if (self.colorSpaceModel == kCGColorSpaceModelMonochrome) return c[0];
+	if (self.LOT_colorSpaceModel == kCGColorSpaceModelMonochrome) return c[0];
 	return c[1];
 }
 
-- (CGFloat)blue {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -blue");
+- (CGFloat)LOT_blue {
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be an RGB color to use -blue");
 	const CGFloat *c = CGColorGetComponents(self.CGColor);
-	if (self.colorSpaceModel == kCGColorSpaceModelMonochrome) return c[0];
+	if (self.LOT_colorSpaceModel == kCGColorSpaceModelMonochrome) return c[0];
 	return c[2];
 }
 
-- (CGFloat)white {
-	NSAssert(self.colorSpaceModel == kCGColorSpaceModelMonochrome, @"Must be a Monochrome color to use -white");
+- (CGFloat)LOT_white {
+	NSAssert(self.LOT_colorSpaceModel == kCGColorSpaceModelMonochrome, @"Must be a Monochrome color to use -white");
 	const CGFloat *c = CGColorGetComponents(self.CGColor);
 	return c[0];
 }
 
-- (CGFloat)alpha {
+- (CGFloat)LOT_alpha {
 	return CGColorGetAlpha(self.CGColor);
 }
 
-- (UInt32)rgbHex {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use rgbHex");
+- (UInt32)LOT_rgbHex {
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use rgbHex");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return 0;
   
-	r = MIN(MAX(self.red, 0.0f), 1.0f);
-	g = MIN(MAX(self.green, 0.0f), 1.0f);
-	b = MIN(MAX(self.blue, 0.0f), 1.0f);
+	r = MIN(MAX(self.LOT_red, 0.0f), 1.0f);
+	g = MIN(MAX(self.LOT_green, 0.0f), 1.0f);
+	b = MIN(MAX(self.LOT_blue, 0.0f), 1.0f);
   
 	return (((int)roundf(r * 255)) << 16)
   | (((int)roundf(g * 255)) << 8)
@@ -167,7 +167,7 @@ static NSMutableDictionary *colorNameCache = nil;
 #pragma mark Arithmetic operations
 
 - (UIColor *)LOT_colorByLuminanceMapping {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -180,7 +180,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByMultiplyingByRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -192,7 +192,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByAddingRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -204,7 +204,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByLighteningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -216,7 +216,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByDarkeningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -244,7 +244,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByMultiplyingByColor:(UIColor *)color {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -253,7 +253,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByAddingColor:(UIColor *)color {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -262,7 +262,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByLighteningToColor:(UIColor *)color {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -271,7 +271,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (UIColor *)LOT_colorByDarkeningToColor:(UIColor *)color {
-	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be a RGB color to use arithmetic operations");
   
 	CGFloat r,g,b,a;
 	if (![self LOT_red:&r green:&g blue:&b alpha:&a]) return nil;
@@ -282,14 +282,14 @@ static NSMutableDictionary *colorNameCache = nil;
 #pragma mark String utilities
 
 - (NSString *)LOT_stringFromColor {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -LOT_stringFromColor");
+	NSAssert(self.LOT_canProvideRGBComponents, @"Must be an RGB color to use -LOT_stringFromColor");
 	NSString *result;
-	switch (self.colorSpaceModel) {
+	switch (self.LOT_colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
-			result = [NSString stringWithFormat:@"{%0.3f, %0.3f, %0.3f, %0.3f}", self.red, self.green, self.blue, self.alpha];
+			result = [NSString stringWithFormat:@"{%0.3f, %0.3f, %0.3f, %0.3f}", self.LOT_red, self.LOT_green, self.LOT_blue, self.LOT_alpha];
 			break;
 		case kCGColorSpaceModelMonochrome:
-			result = [NSString stringWithFormat:@"{%0.3f, %0.3f}", self.white, self.alpha];
+			result = [NSString stringWithFormat:@"{%0.3f, %0.3f}", self.LOT_white, self.LOT_alpha];
 			break;
 		default:
 			result = nil;
@@ -298,7 +298,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (NSString *)LOT_hexStringValue {
-	return [NSString stringWithFormat:@"%0.6X", (unsigned int)self.rgbHex];
+	return [NSString stringWithFormat:@"%0.6X", (unsigned int)self.LOT_rgbHex];
 }
 
 + (UIColor *)LOT_colorWithString:(NSString *)stringToConvert {

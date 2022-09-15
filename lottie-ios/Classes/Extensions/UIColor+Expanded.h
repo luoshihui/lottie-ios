@@ -4,14 +4,14 @@
 #define CLAMP(val,min,max)    MIN(MAX(val,min),max)
 
 @interface UIColor (UIColor_Expanded)
-@property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
-@property (nonatomic, readonly) BOOL canProvideRGBComponents;
-@property (nonatomic, readonly) CGFloat red; // Only valid if canProvideRGBComponents is YES
-@property (nonatomic, readonly) CGFloat green; // Only valid if canProvideRGBComponents is YES
-@property (nonatomic, readonly) CGFloat blue; // Only valid if canProvideRGBComponents is YES
-@property (nonatomic, readonly) CGFloat white; // Only valid if colorSpaceModel == kCGColorSpaceModelMonochrome
-@property (nonatomic, readonly) CGFloat alpha;
-@property (nonatomic, readonly) UInt32 rgbHex;
+@property (nonatomic, readonly) CGColorSpaceModel LOT_colorSpaceModel;
+@property (nonatomic, readonly) BOOL LOT_canProvideRGBComponents;
+@property (nonatomic, readonly) CGFloat LOT_red; // Only valid if canProvideRGBComponents is YES
+@property (nonatomic, readonly) CGFloat LOT_green; // Only valid if canProvideRGBComponents is YES
+@property (nonatomic, readonly) CGFloat LOT_blue; // Only valid if canProvideRGBComponents is YES
+@property (nonatomic, readonly) CGFloat LOT_white; // Only valid if colorSpaceModel == kCGColorSpaceModelMonochrome
+@property (nonatomic, readonly) CGFloat LOT_alpha;
+@property (nonatomic, readonly) UInt32 LOT_rgbHex;
 
 - (NSString *)LOT_colorSpaceString;
 
